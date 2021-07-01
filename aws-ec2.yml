@@ -4,7 +4,7 @@
   hosts: localhost
   connection: local
   vars:
-    state: "absent" # default action - apply
+    state: "present" # default action - apply
 
   tasks:
   - name: Deployment
