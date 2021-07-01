@@ -1,0 +1,31 @@
+---
+
+- name: Terraform playbook
+  hosts: localhost
+  connection: local
+  vars:
+    state: "absent" # default action - apply
+
+  tasks:
+  - name: Deployment
+    terraform:
+      project_path: './terraform/'
+      plan_file: "{{ plan_file | default(omit) }}"
+      state: "{{ state }}"
+      force_init: true
+      backend_config:
+        region: "ap-southeast-2"
+        bucket: "maxbuckets31"
+        key: "terraform.tfstate"
+      variables:
+        instance_name: "{{ instance_name | default(omit) }}"
+        instance_type: "{{ instance_type | default(omit) }}"
+        instance_count: "{{ instance_count | default(omit) }}"
+        instance_key_name: "{{ instance_key_name | default(omit) }}"
+    register: terraform_output
+
+# Output just the plan
+
+  - debug:
+      var: terraform_output.stdout_lines
+ 
